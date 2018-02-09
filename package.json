@@ -1,0 +1,24 @@
+{
+  "name": "",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "consolidate": "^0.15.0",
+    "cytoscape": "^3.2.8",
+    "express": "^4.16.2",
+    "genetic": "^0.3.1",
+    "socket.io": "^2.0.4",
+    "split": "^1.0.1",
+    "url": "^0.11.0",
+    "websocket": "^1.0.25",
+    "websockets": "^0.2.0"
+  }
+}

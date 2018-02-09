@@ -1,0 +1,1 @@
+Use [OSM XML file to road graph converter](https://github.com/AndGem/OsmToRoadGraph)

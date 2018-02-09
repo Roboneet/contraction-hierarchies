@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="https://openlayers.org/en/v4.6.4/css/ol.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/static/css/ch.css">
+    
+    <script src="https://openlayers.org/en/v4.6.4/build/ol.js" type="text/javascript"></script>
+    <title>Map</title>
+  </head>
+  <body>
+    
+    <section id="main_wrapper">
+    <header>
+      <h1>Contraction Hierarchies</h1>
+      <div class="stats">
+      <p class="level">level : <span>_</span></p>
+      <p class="mode">mode : <span>_</span></p>
+      </div>
+    </header>
+    <div id="wrapper">
+      <div id="menu">
+        <button id="clear">Clear Screen</button>
+        <button class="selector" data="origin">Select Origin</button>
+        <button class="selector" data="dest">Select Destination</button>
+        <button id="query">Find Path</button>
+        <button id="getId">Get id</button>
+        <button id="dispNodes">Show Nodes</button>
+        <button  id="level">Get Level</button>
+        <button id="contract">Contract Node</button>
+        
+        <button id="dispGraph">Show Graph</button>
+        <button id="dispCGraph">Show Contracted Graph</button>
+        <button id="intEdges">Show interesting Edges</button>
+
+        <div id="msg"></div>
+      </div>
+      <div id="map" class="map"></div>
+    </div>
+  </section> 
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/ch.js"></script>
+  </body>
+</html>

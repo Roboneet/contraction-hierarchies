@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Map</title>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
+	integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+	crossorigin=""/>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<style>
+	*{
+		margin:0;
+		padding:0;
+	}
+	#mapid { height: 100vh; width: 100vw; }
+</style>
+</head>
+<body>
+
+	<div id="mapid"></div>
+
+
+	<script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
+	integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
+	crossorigin=""></script>
+	<script >
+		
+		var mymap = L.map('mapid')
+		.setView([48.144437, 11.5419035], 13);
+		// http://{s}.tiles.mapbox.com/v3/ianmule.bg2v5cdi/{z}/{x}/{y}.png
+		// http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
+		// http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png
+		// Choose from : http://leaflet-extras.github.io/leaflet-providers/preview/
+		var mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+		L.tileLayer('https://{s}.tile.thunderforest.com/transport/{z}/{x}/{y}.png?apikey=5e37d593758a4b69b8fcf089fb04b5b2',{attribution: '&copy; ' + mapLink + ' Contributors'}).addTo(mymap);
+
+		
+
+		function getMap(){
+			return fetch('/map').then((res)=>{
+				console.log(res)
+				return res.json();
+			})
+		}
+
+	// d3 js part
+
+	var svg = d3.select(mymap.getPanes().overlayPane).append("svg"),
+	g = svg.append("g").attr("class", "leaflet-zoom-hide");
+	function projectPoint(x, y) {
+		var point = mymap.latLngToLayerPoint(new L.LatLng(y, x));
+		this.stream.point(point.x, point.y);
+	}
+	var path, transform, geojson;
+
+
+	getMap().catch((err)=>{
+		console.log("** ERR get MAP **");
+		console.log(err);
+	}).then((collection)=>{
+		
+
+		transform = d3.geoTransform({point: projectPoint});
+		path = d3.geoPath().projection(transform);			
+		
+		var feature = g.selectAll("path")
+		.data(collection.features)
+		.enter().append("path");
+
+		feature.attr("d", path);
+		geojson = collection
+		drawSVG();
+
+	})
+
+	mymap.on('viewreset',drawSVG)
+	mymap.on('zoomend',drawSVG)
+
+	 function drawSVG(){
+		console.log('called..')
+		var bounds = path.bounds(geojson),
+		topLeft = bounds[0],
+		bottomRight = bounds[1];
+
+
+		svg .attr("width", bottomRight[0] - topLeft[0])
+		.attr("height", bottomRight[1] - topLeft[1])
+		.style("left", topLeft[0] + "px")
+		.style("top", topLeft[1] + "px");
+
+		g.attr("transform", "translate(" + -topLeft[0] + "," + -topLeft[1] + ")");
+	}
+
+
+</script>
+</body>
+</html>
